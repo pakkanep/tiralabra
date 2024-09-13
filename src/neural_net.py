@@ -1,20 +1,21 @@
-#neural network object
+# neural network object
 import numpy as np
 
 class NeuralNet():
     def __init__(self, layers:list):
+        self.layers = len(layers)
         self.weights = []
         self.biases = []
 
 
-    def gradient_descent():
+    def stochastic_gradient_descent(self):
         pass
         """
         call function minibatch 
 
         """
 
-    def mini_batch(mini_batch_size):
+    def mini_batch(self, mini_batch_size):
         """
             Compute the gradient for many training examples
             
@@ -31,17 +32,20 @@ class NeuralNet():
                 δ^l = error vectors
 
         """
+        
 
         for do_something in range(mini_batch_size):
-            #call back propagation that returns the gradient of the cost func
+            # call back propagation that calculates and returns the gradients
+            # update the weight and biases in the network
             pass
 
-    def backpropagation(x, y):
-        pass
+
+
+    def backpropagation(self, x, y):
         """
             Computes the gradient of the cost function for a single training example
             
-            returns:
+            returns: gradients
 
             1. Input:
                 x = 28x28 pixel image changed to a vector of shape (784, 1).
@@ -56,23 +60,48 @@ class NeuralNet():
             Compute the error vectors δ^l backward, starting from the final layer.    
             
             3. Output error:
-                compute the vector del^L = prime_sigmoid(z^L)
+                compute the vector delta (δ^L) = prime_sigmoid(z^L)
 
             4. Backpropagate the error:
                 For each  l=L-1,L-2,...., 2
 
             5. Output:
-                The gradient of the cost func is given by:
-                nabla_C / nabla_weight between kth neuron from l-1 and jth neuron from l
+                nabla_biases: layer by layer list where each array represents the gradient of the cost function with respect to the biases for a layer.
+                nabla_weights = layer by layer list where each array represents the gradient of the cost function with respect to the weights for a layer
 
-                nabla_C / nabla_bias jth bias layer l
         
         """
+        # feed forward loop
+        activations = [x] # x contains the activations from the input layer as vector shape of 784,
+        weighted_inputs = [] # save weighted inputs z^l of all layers
+        activation = activations[0]
+
+        for w, b in zip(self.weights, self.biases): # not including the input layer
+            weighted_input = np.dot(w * activation) + b # z^l = w^l * a^l-1 + b^l 
+            weighted_inputs.append(weighted_input)
+            activation = sigmoid(weighted_input) # a^l = sigmoid(z^l)
+            activations.append(activation) 
+            
+        
+        # calculate the error of last layer to be able to calc the error of previous layers
+        nabla_biases = []
+        nabla_weights = []
+
+        delta = (activations[-1] - y) * sigmoid_prime(activations[-1])
+
+
+        # backpropagation loop
+        nabla_biases = []
+        nabla_weights = []
+        for layer in range(self.layers, 1): # from final layer to first layer but not input layer
+            nabla_biases[layer] = 0 
+            nabla_weights[layer] = 0 
 
 
 
 def sigmoid(z):
     return 1.0 / (1.0 + np.exp(-z))
 
-
+def sigmoid_prime(z):
+    return sigmoid(z)*(1-sigmoid(z))
 
