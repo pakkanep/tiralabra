@@ -1,40 +1,28 @@
 # Määrittelydokumentti
 Tämä määrittelydokumentti määrittelee Helsingin yliopiston Aineopintojen harjoitustyö: Algoritmit ja tekoäly -kurssilla tehtävän harjoitustyön. Suoritan kurssin Tietojenkäsittelytieteen kandiohjelmassa (TKT).
 ## Aihe
-Koneoppiminen, hahmontunnistus, käsin kirjoitettujen numeroiden tunnistus käyttämällä neuroverkkoja tai k-lähimmän naapurin menetelmää.
+Koneoppiminen, hahmontunnistus, käsin kirjoitettujen numeroiden tunnistus käyttämällä neuroverkkoa.
+Toteutan neuroverkon opettamisen käyttämällä mini-satsi gradientti menetelmää. Ohjelma ensin oppii harjoitusdatalla ja sitten osaa tunnistaa käsin kirjoitettuja numeroita.
 
 ### Syötteet
-Mnist tietokanta
+Mnist tietokanta.
+Tietokanta koostuu harmaasävykuvista 28x28 pikseliä, jotka sitten on tarkotus muuttaa 784 ulotteiseksi vektoriksi ja syöttää ohjelmalle.
 
 ### Aikavaativuudet
 #### Neuroverkot:
 
-Ymmärtääkseni ainakin backpropagation algoritmin aikavaativuus neuroverkkojen kouluttamisessa on O(n^2 * p), missä n on neuroverkon yhteyksien (painojen) lukumäärä ja p on koulutusesimerkkien lukumäärä.
-Nopealla vilkasulla käytetään myös stochastic gradient descent algoritmia mutta aikavaativuuksia en algoritmille muuten löytänyt kun että nopealla omalla analyysillä ainakin O(n)
+- Vastavirta algoritmin aikavaativuus neuroverkkojen kouluttamisessa on O(n^2 * p), missä n on neuroverkon yhteyksien (painojen) lukumäärä ja p on koulutusesimerkkien lukumäärä.
+- Stokastinen gradientti menetelmä O(n*((s/k)*m)), missä n on harjotusdatan läpikäyntien määrä, s/k = harjoitusdatan koko/satsin koko ja m on minisatsin aikavaativuus.
+- Mini-satsi O(n* m* bp) missä n on minisatsin koko, m on painojen ja vakiotermien määrä ja bp on vastavirta algon aikavaativuus.
 
-#### K-lähimmät naapurit:
-
-n = Koulutusesimerkkien lukumäärä 
-f = Ominaisuuksien lukumäärä 
-k = k lähintä naapuria
-
-Brute force (raakavoima): 
-mallin opettamisen aikavaativuus: O(1)
-Ennustamisen aikavaativuus: O(nf + kf)
-Suoritusaikaisen tilan vaativuus: O(n*f)
-
-kd-puu (kd-tree): 
-mallin opettamisen aikavaativuus: O(fnlog(n))
-Ennustamisen aikavaativuus: O(klog(n)) 
-Suoritusaikaisen tilan vaativuus: O(nf)
 
 ## Ohjelmointikielet
 Projekti olisi tarkoitus koodata pythonilla.
 Vertaisarvoinnit onnistuu myös c++
 
 ## Algoritmit
-neuroverkko vastavirta-algoritmeineen ym. toteutetaan itse.
-tai k-lähimmän naapurin menetelmä.
+Vastavirta-algoritmi.
+Mini-satsi gradientti menetelmä
 
 ## Dokumentaatio
 Dokumentaatio on suomeksi mutta koodaaminen ja docstringit englanniksi
