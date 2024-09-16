@@ -1,11 +1,13 @@
 # neural network object
 import numpy as np
 
+
 class NeuralNet():
     def __init__(self, layers:list):
         self.layers = len(layers)
-        self.weights = []
-        self.biases = []
+        self.weights = [np.random.randn(y, x) for x, y in zip(layers[:-1], layers[1:])]
+        self.biases = [np.random.randn(y, 1) for y in layers[1:]]
+
 
 
     def stochastic_gradient_descent(self):
@@ -74,28 +76,33 @@ class NeuralNet():
         # feed forward loop
         activations = [x] # x contains the activations from the input layer as vector shape of 784,
         weighted_inputs = [] # save weighted inputs z^l of all layers
-        activation = activations[0]
+        activation = activations[0] # sets the input layer activations to start counting the activations
 
         for w, b in zip(self.weights, self.biases): # not including the input layer
-            weighted_input = np.dot(w * activation) + b # z^l = w^l * a^l-1 + b^l 
+            weighted_input = np.dot(w, activation) + b # z^l = w^l * a^l-1 + b^l 
             weighted_inputs.append(weighted_input)
             activation = sigmoid(weighted_input) # a^l = sigmoid(z^l)
             activations.append(activation) 
             
         
         # calculate the error of last layer to be able to calc the error of previous layers
-        nabla_biases = []
-        nabla_weights = []
+        grad_biases = [np.zeros(x.shape) for x in self.biases]
+        grad_weights = [np.zeros(x.shape) for x in self.weights]
 
-        delta = (activations[-1] - y) * sigmoid_prime(activations[-1])
+        delta = (activations[-1] - y) * sigmoid_prime(weighted_input[-1]) # (δ^L)
+        grad_biases[-1] = delta
+        grad_weights[-1] = np.dot(delta, activations[-2].transpose())
 
 
         # backpropagation loop
-        nabla_biases = []
-        nabla_weights = []
-        for layer in range(self.layers, 1): # from final layer to first layer but not input layer
-            nabla_biases[layer] = 0 
-            nabla_weights[layer] = 0 
+        
+        for layer in range(2, self.layers): # from final layer to first layer but not input layer
+            delta = np.dot(self.weights[-layer+1].transpose(), delta) * sigmoid_prime(weighted_inputs[-layer]) 
+            grad_biases[-layer] = delta
+            grad_weights[-layer] = np.dot(delta, activations[-layer-1].transpose())
+
+        return (grad_biases, grad_weights)
+    
 
 
 
