@@ -3,6 +3,11 @@ HY - Aineopintojen harjoitustyö: Algoritmit ja tekoäly
 
 ## Dokumentaatio
 [Määrittelydokumentti](./docs/maarittelydokumentti.md)
+
+[Testausdokumentti](./docs/testausdokumentti.md)
+
+[Toteutusdokumentti](./docs/toteutusdokumentti.md)
+
 ## Viikkoraportit
 [Viikko 1](./docs/viikkoraportit/viikkoraportti1.md)
 
