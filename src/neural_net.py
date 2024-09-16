@@ -34,12 +34,25 @@ class NeuralNet():
                 δ^l = error vectors
 
         """
-        
+        grad_biases = [np.zeros(x.shape) for x in self.biases] # store all changes in biases per this minibatch fun call
+        grad_weights = [np.zeros(x.shape) for x in self.weights] # same goes for weights
+        x, y = 0, 0 #where do I get x and y
 
         for do_something in range(mini_batch_size):
+            nudges_b, nudges_w = self.backpropagation(x, y)
             # call back propagation that calculates and returns the gradients
-            # update the weight and biases in the network
-            pass
+            # increase or decrease the weights and biases to minimize the cost func 
+            grad_biases = [b + nudge_b for b, nudge_b in zip(grad_biases, nudges_b)]
+            grad_weights = [w + nudge_w for w, nudge_w in zip(grad_biases, nudges_w)]
+
+        #_______remember to change these___________
+
+        learning_rate = 0 # ??
+        m = len(mini_batch_size) # ??
+        #update the weights and biases
+        self.weights = [(w - (learning_rate/m)) * grad_w for w, grad_w in zip(self.weights, grad_weights)]
+
+        self.biases = [(b - (learning_rate/m)) * grad_b for b, grad_b in zip(self.biases, grad_biases)]
 
 
 
