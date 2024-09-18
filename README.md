@@ -1,4 +1,7 @@
 # tiralabra
+
+Neural network for recognizing handwritten digits
+
 HY - Aineopintojen harjoitustyö: Algoritmit ja tekoäly
 
 ## Dokumentaatio
