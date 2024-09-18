@@ -18,4 +18,6 @@
 | Päivä | Käytetty aika | Kuvaus |
 | ----- | ------------- | ------ |
 | 16.9.  | 5h            | Vastavirta algoritmin viimeistely ja testauksen aloittaminen |
-| Yhteensä | 4h         |        |
+| 17.9.  | 5h            | Algoritmien kokeilua ja Testitapausten ihmettelyä |
+| 18.9.  | 5h            | Vastavirta algoritmin debuggaus |
+| Yhteensä | 15h         |        |
