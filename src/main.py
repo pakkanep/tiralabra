@@ -20,7 +20,7 @@ def load_test_data():
 
 
 if __name__ == "__main__":
-    sizes = [784, 40, 10]
+    sizes = [784, 50, 10]
     neuroverkko = NeuralNet(sizes)
     training, validation, testing = ld.load_data()
     test_data = load_test_data()
@@ -28,13 +28,15 @@ if __name__ == "__main__":
     batch_size = 10
     n = len(training)
 
-
+    rundit =0
     for round in range(10):
         random.shuffle(training)
         for idx in range(0, n, batch_size):
+            rundit+=1
             mini_batch = training[idx:idx+batch_size]
             neuroverkko.mini_batch(mini_batch, learning_rate)
         
+        print(rundit)
         summa = 0
         for testi in testing:
             if np.argmax(neuroverkko.neuralnet_output(testi[0])) == testi[1]:
