@@ -17,7 +17,7 @@ class NeuralNet():
 
         """
 
-    def mini_batch(self, mini_batch_size):
+    def mini_batch(self, mini_batch):
         """
             Compute the gradient for many training examples
             
@@ -34,12 +34,12 @@ class NeuralNet():
                 δ^l = error vectors
 
         """
-        grad_biases = [np.zeros(x.shape) for x in self.biases] # store all changes in biases per this minibatch fun call
+        grad_biases = [np.zeros(x.shape) for x in self.biases] # sum of the cost func
         grad_weights = [np.zeros(x.shape) for x in self.weights] # same goes for weights
-        x, y = 0, 0 #where do I get x and y
+        
 
-        for do_something in range(mini_batch_size):
-            nudges_b, nudges_w = self.backpropagation(x, y)
+        for X, Y in mini_batch:
+            nudges_b, nudges_w = self.backpropagation(X, Y)
             # call back propagation that calculates and returns the gradients
             # increase or decrease the weights and biases to minimize the cost func 
             grad_biases = [b + nudge_b for b, nudge_b in zip(grad_biases, nudges_b)]
@@ -47,8 +47,8 @@ class NeuralNet():
 
         #_______remember to change these___________
 
-        learning_rate = 0 # ??
-        m = len(mini_batch_size) # ??
+        learning_rate = 3.0 # ??
+        m = len(mini_batch) # ??
         #update the weights and biases
         self.weights = [(w - (learning_rate/m)) * grad_w for w, grad_w in zip(self.weights, grad_weights)]
 
@@ -103,6 +103,13 @@ class NeuralNet():
         grad_weights = [np.zeros(x.shape) for x in self.weights]
 
         delta = (activations[-1] - y) * sigmoid_prime(weighted_input[-1]) # (δ^L)
+        
+        
+        #REMEMBER TO DELETE PRINT
+        print("prints from backprop algo delta\n", delta) 
+        
+        
+        
         grad_biases[-1] = delta
         grad_weights[-1] = np.dot(delta, activations[-2].transpose())
 
