@@ -17,7 +17,15 @@ class NeuralNet():
 
         """
 
-    def mini_batch(self, mini_batch):
+    def neuralnet_output(self, x):
+        activations = x
+        for bias, weight in zip(self.biases, self.weights):
+            activations = sigmoid(np.dot(weight, activations) + bias)
+        
+        return activations
+
+
+    def mini_batch(self, mini_batch, learning_rate):
         """
             Compute the gradient for many training examples
             
@@ -45,14 +53,13 @@ class NeuralNet():
             grad_biases = [b + nudge_b for b, nudge_b in zip(grad_biases, nudges_b)]
             grad_weights = [w + nudge_w for w, nudge_w in zip(grad_biases, nudges_w)]
 
-        #_______remember to change these___________
-
-        learning_rate = 3.0 # ??
-        m = len(mini_batch) # ??
+        
+        m = len(mini_batch)
+        
         #update the weights and biases
-        self.weights = [(w - (learning_rate/m)) * grad_w for w, grad_w in zip(self.weights, grad_weights)]
+        self.weights = [w - (learning_rate / m) * grad_w for w, grad_w in zip(self.weights, grad_weights)]
 
-        self.biases = [(b - (learning_rate/m)) * grad_b for b, grad_b in zip(self.biases, grad_biases)]
+        self.biases = [b - (learning_rate / m) * grad_b for b, grad_b in zip(self.biases, grad_biases)]
 
 
 
@@ -106,7 +113,7 @@ class NeuralNet():
         
         
         #REMEMBER TO DELETE PRINT
-        print("prints from backprop algo delta\n", delta) 
+        #print("prints from backprop algo delta\n", delta) 
         
         
         
