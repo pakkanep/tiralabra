@@ -1,5 +1,6 @@
 # neural network object
 import numpy as np
+import random
 
 
 class NeuralNet():
@@ -10,19 +11,30 @@ class NeuralNet():
 
 
 
-    def stochastic_gradient_descent(self):
-        pass
-        """
-        call function minibatch 
-
-        """
+    def stochastic_gradient_descent(self, learning_rate, rounds, training_data, batch_size, validation_data):
+        n = len(training_data)
+        for round in range(rounds):
+            random.shuffle(training_data)
+            for idx in range(0, n, batch_size):
+                minibatch = training_data[idx:idx+batch_size]
+                self.mini_batch(minibatch, learning_rate)
+            valid_sum = 0
+            for validi in validation_data:
+                if np.argmax(self.neuralnet_output(validi[0])) == validi[1]:
+                    valid_sum += 1
+            print(valid_sum, "/", 10000)
+            
 
     def neuralnet_output(self, x):
         activations = x
         for bias, weight in zip(self.biases, self.weights):
             activations = sigmoid(np.dot(weight, activations) + bias)
-        
         return activations
+    
+
+    def cost_function(self, x, y):
+        y_hat = self.neuralnet_output(x)
+        return 0.5 * (np.sum(y_hat-y)**2)
 
 
     def mini_batch(self, mini_batch, learning_rate):
