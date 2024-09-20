@@ -3,7 +3,7 @@ import numpy as np
 from neural_net import NeuralNet
 
 def load_test_data():
-    data = np.load("src/data/unit_tests_data.npz")
+    data = np.load("src/data/100_test_data.npz")
     test_inputs = data["inputs"]
     test_labels = data["labels"]
     test_inputs = [x.reshape((784, 1)) for x in test_inputs]

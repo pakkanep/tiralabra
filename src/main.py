@@ -13,20 +13,18 @@ def load_test_data():
 
     return test_data
 
-# def load_train_data():
-#     training, validation, testing = ld.load_data()
 
-#     return (training, validation, testing)
 
 
 if __name__ == "__main__":
-    sizes = [784, 50, 10]
+    sizes = [784, 20, 10]
     neuroverkko = NeuralNet(sizes)
     training, validation, testing = ld.load_data()
     test_data = load_test_data()
-    learning_rate = 3.0
+    learning_rate = 2.0
     batch_size = 10
     n = len(training)
+    n = n - 40000
 
     rundit =0
     for round in range(10):

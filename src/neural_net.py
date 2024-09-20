@@ -33,17 +33,16 @@ class NeuralNet():
 
         for X, Y in mini_batch:
             nudges_b, nudges_w = self.backpropagation(X, Y)
-            # call back propagation that calculates and returns the gradients
-            # increase or decrease the weights and biases to minimize the cost func 
+            #print(nudges_b[0].shape, nudges_b[1].shape)
+           
             grad_biases = [gb + nudge_b for gb, nudge_b in zip(grad_biases, nudges_b)]
-            grad_weights = [gw + nudge_w for gw, nudge_w in zip(grad_biases, nudges_w)]
+            grad_weights = [gw + nudge_w for gw, nudge_w in zip(grad_weights, nudges_w)]
 
-        
+    
         m = len(mini_batch)
         
         self.weights = [w - (learning_rate / m) * grad_w for w, grad_w in zip(self.weights, grad_weights)]
         self.biases = [b - (learning_rate / m) * grad_b for b, grad_b in zip(self.biases, grad_biases)]
-
 
 
     def backpropagation(self, x, y):
