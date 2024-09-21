@@ -1,5 +1,6 @@
 from neural_net import NeuralNet
 import load_data as ld
+import numpy as np
 
 
 if __name__ == "__main__":
@@ -8,13 +9,15 @@ if __name__ == "__main__":
     training, validation, testing = ld.load_data()
     learning_rate = 3.0
     
-    neuroverkko.stochastic_gradient_descent(
-        learning_rate,
-        5,
-        training,
-        10,
-        validation
-        )
+    # neuroverkko.stochastic_gradient_descent(
+    #     learning_rate,
+    #     5,
+    #     training,
+    #     10,
+    #     validation
+    #     )
+    
+
     
 
     
