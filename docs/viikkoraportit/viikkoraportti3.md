@@ -1,5 +1,5 @@
 #### Mitä olen tehnyt tällä viikolla?
-
+Näkyy hyvin tuntikirjanpidosta. Lisäksi opetellut aiheeseen liittyvää matikkaa.
   
 #### Miten ohjelma on edistynyt?
 - Ohjelma on testejä lukuunottamatta edistynyt ihan hyvin.
@@ -7,7 +7,7 @@
 
   
 #### Mitä opin tällä viikolla / tänään?
-
+Neuroverkkojen testaamisesta ja eri haasteista mitä liittyy verkon bugeihin. 
   
 #### Mikä jäi epäselväksi tai tuottanut vaikeuksia?
 
@@ -16,6 +16,8 @@
 
 
 #### Mitä teen seuraavaksi?
+
+- Seuraavaksi ajattelin kirjoitella lisää testejä sekä tutkia millä tavoin verkkoa voi opettaa paremmin. Esimerkiksi alustamalla painot eri tavalla sekä vaihtamalla neuronin aktivointifunktiota?
 
 
 ## Tuntikirjanpito
@@ -26,4 +28,5 @@
 | 17.9.  | 5h            | Algoritmien kokeilua ja Testitapausten ihmettelyä |
 | 18.9.  | 5h            | Vastavirta algoritmin debuggaus |
 | 20.9.  | 4h            | Minibatch funktion debuggaus   |
-| Yhteensä | 19h         |        |
+| 21.9.  | 2h            | Testaus |
+| Yhteensä | 21h         |        |
