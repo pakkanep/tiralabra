@@ -1,8 +1,8 @@
+import random
 import unittest
 import numpy as np
 from neural_net import NeuralNet
 import load_data as ld
-import random
 
 
 def load_data():
@@ -18,16 +18,16 @@ class TestNeuralNet(unittest.TestCase):
 
     def test_constructor(self):
         pass
-        
-    
+
+
     def test_backpropagation(self):
         """
         Calculate numerical gradient and compare it to the analytical gradient
         that backprop calculates to ensure that it calculates them correctly.
         """
         pass
-        
-         
+
+
 
     def test_mini_batch(self):
         """
@@ -55,8 +55,8 @@ class TestNeuralNet(unittest.TestCase):
         
         return self.assertGreater(accuracy2, accuracy1)
 
-        
-        
+
+
     def test_gradients_are_non_zero_and_loss_decreases(self):
         training_data = self.data[0][:1]
         grad_b, grad_w = self.neural_net.backpropagation(training_data[0][0], training_data[0][1])
@@ -74,11 +74,11 @@ class TestNeuralNet(unittest.TestCase):
                 break
 
         return self.assertTrue(grad_b_non_zero, grad_w_non_zero)
-        
+
 
     def test_network_overfits_to_a_small_dataset(self):
         pass
-    
+
 
     def test_order_of_samples_in_batch_doesnot_affect_output(self):
         pass
