@@ -25,8 +25,50 @@ class TestNeuralNet(unittest.TestCase):
         Calculate numerical gradient and compare it to the analytical gradient
         that backprop calculates to ensure that it calculates them correctly.
         """
-        pass
+        x, y = self.data[0][0][0], self.data[0][0][1]
+        epsilon = 1e-5
 
+        nabla_b, nabla_w = self.neural_net.backpropagation(x, y)
+        num_nabla_b = [np.zeros(b.shape) for b in self.neural_net.biases]
+        num_nabla_w = [np.zeros(w.shape) for w in self.neural_net.weights]
+
+        
+        for l in range(len(self.neural_net.biases)):
+            for i in range((self.neural_net.biases[l].shape[0])):
+                org_b = self.neural_net.biases[l][i]
+
+                self.neural_net.biases[l][i] = org_b + epsilon
+                cost_plus = self.neural_net.cost_function(x, y)
+                self.neural_net.biases[l][i] = org_b - epsilon
+                cost_minus = self.neural_net.cost_function(x, y)
+                self.neural_net.biases[l][i] = org_b
+                num_nabla_b[l][i] = (cost_plus - cost_minus) / (2 * epsilon)
+
+        for l in range(len(self.neural_net.weights)):
+            for i in range(self.neural_net.weights[l].shape[0]):
+                for j in range(self.neural_net.weights[l].shape[1]):
+                    org_w = self.neural_net.weights[l][i, j]
+
+                    self.neural_net.weights[l][i, j] = org_w + epsilon
+                    cost_plus = self.neural_net.cost_function(x, y)
+
+                    self.neural_net.weights[l][i, j] = org_w - epsilon
+                    cost_minus = self.neural_net.cost_function(x, y)
+
+                    self.neural_net.weights[l][i, j] = org_w
+                    num_nabla_w[l][i, j] = (cost_plus - cost_minus) / (2 * epsilon)
+        
+        rel_diffs = []
+
+        for l in range(len(nabla_b)):
+            difference = (np.linalg.norm(num_nabla_b[l] - nabla_b[l])) / (np.linalg.norm(num_nabla_b[l]) + np.linalg.norm(nabla_b[l]))
+            rel_diffs.append(difference)
+
+        for l in range(len(nabla_w)):
+            difference = np.linalg.norm(num_nabla_w[l] - nabla_w[l]) / (np.linalg.norm(num_nabla_w[l]) + np.linalg.norm(nabla_w[l]))
+            rel_diffs.append(difference)
+
+        return self.assertGreater(10**-7, max(rel_diffs))
 
 
     def test_mini_batch(self):

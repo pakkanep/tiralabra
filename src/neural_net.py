@@ -5,7 +5,7 @@ import numpy as np
 
 class NeuralNet():
     def __init__(self, layers:list):
-        self.layers = len(layers)
+        self.n_layers = len(layers)
         self.weights = [np.random.randn(y, x) for x, y in zip(layers[:-1], layers[1:])]
         self.biases = [np.random.randn(y, 1) for y in layers[1:]]
 
@@ -44,7 +44,7 @@ class NeuralNet():
         Calculates the MSE 
         """
         y_hat = self.neuralnet_output(x)
-        return 0.5 * (np.sum(y_hat-y)**2)
+        return 0.5 * np.sum((y_hat-y)**2)
 
 
     def mini_batch(self, mini_batch, learning_rate):
@@ -74,7 +74,7 @@ class NeuralNet():
         Calculates the gradient vectors
         """
 
-        activations = [x] 
+        activations_list = [x] 
         z_vectors = []
         activation = x 
 
@@ -83,29 +83,30 @@ class NeuralNet():
             z_vectors.append(weighted_input)
 
             activation = sigmoid(weighted_input) # a^l = sigmoid(z^l)
-            activations.append(activation) 
+            activations_list.append(activation) 
 
 
         grad_biases = [np.zeros(b.shape) for b in self.biases]
         grad_weights = [np.zeros(w.shape) for w in self.weights]
 
-        C_x = activations[-1] - y
+        C_x = activations_list[-1] - y
         delta = C_x * sigmoid_prime(z_vectors[-1]) # (δ^L)
 
 
         grad_biases[-1] = delta
-        grad_weights[-1] = np.dot(delta, activations[-2].transpose())
+        grad_weights[-1] = np.dot(delta, activations_list[-2].transpose())
 
 
         # backpropagation loop
 
-        for layer in range(2, self.layers): # from final layer to first layer but not input layer
+        for layer in range(2, self.n_layers): # from final layer to first layer but not input layer
             zl = z_vectors[-layer]
             derivative = sigmoid_prime(zl)
+
             delta = np.dot(self.weights[-layer+1].transpose(), delta) * derivative
 
             grad_biases[-layer] = delta
-            grad_weights[-layer] = np.dot(delta, activations[-layer-1].transpose())
+            grad_weights[-layer] = np.dot(delta, activations_list[-layer-1].transpose())
 
         return (grad_biases, grad_weights)
 
