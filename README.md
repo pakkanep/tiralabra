@@ -18,4 +18,4 @@ HY - Aineopintojen harjoitustyö: Algoritmit ja tekoäly
 
 [Viikko 3](./docs/viikkoraportit/viikkoraportti3.md)
 
-[Viikko 3](./docs/viikkoraportit/viikkoraportti4.md)
+[Viikko 4](./docs/viikkoraportit/viikkoraportti4.md)
