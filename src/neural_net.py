@@ -5,9 +5,11 @@ import numpy as np
 
 class NeuralNet():
     def __init__(self, layers:list):
+        self.sizes = layers
         self.n_layers = len(layers)
-        self.weights = [np.random.randn(y, x) for x, y in zip(layers[:-1], layers[1:])]
-        self.biases = [np.random.randn(y, 1) for y in layers[1:]]
+        self.biases = [np.random.randn(y, 1) for y in self.sizes[1:]]
+        self.weights = [np.random.randn(y, x)/np.sqrt(x)
+                        for x, y in zip(self.sizes[:-1], self.sizes[1:])]
 
 
 
