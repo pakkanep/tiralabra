@@ -12,7 +12,7 @@ def load_data():
 
 class TestNeuralNet(unittest.TestCase):
     def setUp(self):
-        np.random.seed(90)
+        #np.random.seed(90)
         self.neural_net = NeuralNet([784, 20, 10])
         self.data = load_data()
 
@@ -55,15 +55,15 @@ class TestNeuralNet(unittest.TestCase):
         return self.assertGreater(10**-7, max(rel_diffs))
 
 
-    def test_mini_batch(self):
+    def test_classification_accuracy_increases(self):
         """
-        Tests that the loss decreases after a epoch of minibatch updating weights and biases
+        Tests that the classification increases after an epoch of minibatch updating weights and biases.
         Does two epochs so the comparison does not happen based on random data
         """
         training_data = self.data[0][:20000]
         validation_data = self.data[1]
         n = len(training_data)
-        accuracy1, accuracy2 = 0, 0
+        accuracy1, accuracy2 = 0.0, 0.0
         batch_size = 10
         learning_rate = 3.0
         for epoch in range(2):
@@ -72,18 +72,16 @@ class TestNeuralNet(unittest.TestCase):
                 minibatch = training_data[idx:idx+batch_size]
                 self.neural_net.mini_batch(minibatch, learning_rate)
             
-            for valid in validation_data:
-                if np.argmax(self.neural_net.neuralnet_output(valid[0])) == valid[1]:
-                    if epoch == 0:
-                        accuracy1 += 1
-                    else:
-                        accuracy2 += 1
+            if epoch == 0:
+                accuracy1 += self.neural_net.accuracy(validation_data)
+            else:
+                accuracy2 += self.neural_net.accuracy(validation_data)
         
         return self.assertGreater(accuracy2, accuracy1)
 
 
 
-    def test_gradients_are_non_zero_and_loss_decreases(self):
+    def test_gradients_are_non_zero(self):
         training_data = self.data[0][:1]
         grad_b, grad_w = self.neural_net.backpropagation(training_data[0][0], training_data[0][1])
         
@@ -100,6 +98,25 @@ class TestNeuralNet(unittest.TestCase):
                 break
 
         return self.assertTrue(grad_b_non_zero, grad_w_non_zero)
+
+    def test_training_cost_decreases(self):
+        training_data = self.data[0][:20000]
+        n = len(training_data)
+        cost_epoch_1, cost_epoch_2 = 0.0, 0.0
+        batch_size = 10
+        learning_rate = 3.0
+        for epoch in range(2):
+            random.shuffle(training_data)
+            for idx in range(0, n, batch_size):
+                minibatch = training_data[idx:idx+batch_size]
+                self.neural_net.mini_batch(minibatch, learning_rate)
+            
+            if epoch == 0:
+                cost_epoch_1 = self.neural_net.total_cost(training_data[:5000])
+            else:
+                cost_epoch_2 = self.neural_net.total_cost(training_data[:5000])
+        
+        return self.assertGreater(cost_epoch_1, cost_epoch_2)
 
 
     def test_network_overfits_to_a_small_dataset(self):

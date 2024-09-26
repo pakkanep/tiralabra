@@ -12,9 +12,20 @@ class NeuralNet():
                         for x, y in zip(self.sizes[:-1], self.sizes[1:])]
 
 
+    def accuracy(self, data, training=False):
+        if training == True:
+            results = [(np.argmax(self.neuralnet_output(x)), un_vectorize(y))
+                       for (x, y) in data]
+        else:
+            results = [(np.argmax(self.neuralnet_output(x)), y)
+                        for (x, y) in data]
+
+        result_accuracy = sum(int(x == y) for (x, y) in results)
+        return result_accuracy
+
 
     def stochastic_gradient_descent(self, learning_rate, rounds,
-                                    training_data, batch_size, validation_data):
+                                    training_data, batch_size, test_data):
         """
         Searches the local minimum for the cost func
         """
@@ -24,11 +35,17 @@ class NeuralNet():
             for idx in range(0, n, batch_size):
                 minibatch = training_data[idx:idx+batch_size]
                 self.mini_batch(minibatch, learning_rate)
-            valid_sum = 0
-            for validi in validation_data:
-                if np.argmax(self.neuralnet_output(validi[0])) == validi[1]:
-                    valid_sum += 1
-            print(valid_sum, "/", 10000)
+            
+        
+            #training_sum = self.accuracy(training_data[:10000], training=True)
+            valid_sum = self.accuracy(test_data)
+            print(r, "/", rounds)
+            print("test accuracy", valid_sum, "/", len(test_data))
+            #print("training accuracy", training_sum, "/", 10000)
+            print("total cost testdata", self.total_cost(test_data, testing=True))
+            print("total cost trainingdata", self.total_cost(training_data[:10000]))
+            print()
+
 
 
     def neuralnet_output(self, x):
@@ -48,27 +65,45 @@ class NeuralNet():
         y_hat = self.neuralnet_output(x)
         return 0.5 * np.sum((y_hat-y)**2)
 
+    def total_cost(self, data, testing=False, validation=False):
+        """
+            Return the total cost for the data set
+        """
+        cost = 0.0
+        for x, y in data:
+            if testing == True or validation == True:
+                vectorize(y) 
+            a = self.neuralnet_output(x)
+            cost += (0.5*np.linalg.norm(a-y)**2) / len(data)
+        return cost
+
 
     def mini_batch(self, mini_batch, learning_rate):
         """
 
         """
+        x = np.asarray([_x.ravel() for _x, _y in mini_batch]).transpose() 
+        y = np.asarray([_y.ravel() for _x, _y in mini_batch]).transpose()
 
-        grad_biases = [np.zeros(b.shape) for b in self.biases] # sum of the cost func
-        grad_weights = [np.zeros(w.shape) for w in self.weights] # same goes for weights
-
-
-        for x, y in mini_batch:
-            nudges_b, nudges_w = self.backpropagation(x, y)
-            #print(nudges_b[0].shape, nudges_b[1].shape)
-
-            grad_biases = [gb + nudge_b for gb, nudge_b in zip(grad_biases, nudges_b)]
-            grad_weights = [gw + nudge_w for gw, nudge_w in zip(grad_weights, nudges_w)]
-
+        grad_biases, grad_weights = self.backpropagation(x, y)
 
         m = len(mini_batch)
         self.weights = [w - (learning_rate / m) * grad_w for w, grad_w in zip(self.weights, grad_weights)]
         self.biases = [b - (learning_rate / m) * grad_b for b, grad_b in zip(self.biases, grad_biases)]
+
+
+    def feedforward(self, a):
+        z_vectors = []
+        activations_list = [a]
+        activation = a
+
+        for b, w in zip(self.biases, self.weights):
+            z = np.dot(w, activation) + b
+            z_vectors.append(z)
+            activation = sigmoid(z)
+            activations_list.append(activation)
+
+        return (z_vectors, activations_list)
 
 
     def backpropagation(self, x, y):
@@ -76,38 +111,27 @@ class NeuralNet():
         Calculates the gradient vectors
         """
 
-        activations_list = [x] 
-        z_vectors = []
-        activation = x 
+        z_vectors, activations_list = self.feedforward(x)
 
-        for b, w in zip(self.biases, self.weights): # not including the input layer
-            weighted_input = np.dot(w, activation) + b # z^l = w^l * a^l-1 + b^l 
-            z_vectors.append(weighted_input)
-
-            activation = sigmoid(weighted_input) # a^l = sigmoid(z^l)
-            activations_list.append(activation) 
-
-
-        grad_biases = [np.zeros(b.shape) for b in self.biases]
-        grad_weights = [np.zeros(w.shape) for w in self.weights]
+        grad_biases = [0 for _ in self.biases]
+        grad_weights = [0 for i in self.weights]
 
         C_x = activations_list[-1] - y
         delta = C_x * sigmoid_prime(z_vectors[-1]) # (δ^L)
 
-
-        grad_biases[-1] = delta
+        grad_biases[-1] = delta.sum(1).reshape([len(delta), 1])
         grad_weights[-1] = np.dot(delta, activations_list[-2].transpose())
 
 
         # backpropagation loop
 
-        for layer in range(2, self.n_layers): # from final layer to first layer but not input layer
+        for layer in range(2, self.n_layers):
             zl = z_vectors[-layer]
             derivative = sigmoid_prime(zl)
 
             delta = np.dot(self.weights[-layer+1].transpose(), delta) * derivative
 
-            grad_biases[-layer] = delta
+            grad_biases[-layer] = delta.sum(1).reshape([len(delta), 1])
             grad_weights[-layer] = np.dot(delta, activations_list[-layer-1].transpose())
 
         return (grad_biases, grad_weights)
@@ -118,3 +142,11 @@ def sigmoid(z):
 
 def sigmoid_prime(z):
     return sigmoid(z) * (1 - sigmoid(z))
+
+def un_vectorize(y):
+    return np.where(y == 1)[0]
+
+def vectorize(y):
+    result = np.zeros((10, 1))
+    result[y] = 1.0
+    return result
