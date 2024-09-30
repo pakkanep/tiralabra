@@ -1,6 +1,7 @@
 # neural network object
 import random
 import numpy as np
+#import tensorflow as tf
 
 
 class NeuralNet():
@@ -24,26 +25,36 @@ class NeuralNet():
         return result_accuracy
 
 
-    def stochastic_gradient_descent(self, learning_rate, rounds,
-                                    training_data, batch_size, test_data):
+    def stochastic_gradient_descent(
+            self,
+            learning_rate,
+            rounds,
+            batch_size,
+            training_data,
+
+            test_data=False,
+            validation_data=False
+        ):
         """
         Searches the local minimum for the cost func
         """
         n = len(training_data)
         for r in range(rounds):
+            print("round: ",r, "/", rounds)
             random.shuffle(training_data)
             for idx in range(0, n, batch_size):
                 minibatch = training_data[idx:idx+batch_size]
                 self.mini_batch(minibatch, learning_rate)
-            
         
-            #training_sum = self.accuracy(training_data[:10000], training=True)
+
+        if test_data or validation_data:
+            training_sum = self.accuracy(training_data, training=True)
             valid_sum = self.accuracy(test_data)
-            print(r, "/", rounds)
             print("test accuracy", valid_sum, "/", len(test_data))
-            #print("training accuracy", training_sum, "/", 10000)
+            print("training accuracy", training_sum, "/", len(training_data))
+            print()
             print("total cost testdata", self.total_cost(test_data, testing=True))
-            print("total cost trainingdata", self.total_cost(training_data[:10000]))
+            print("total cost trainingdata", self.total_cost(training_data))
             print()
 
 
@@ -72,10 +83,24 @@ class NeuralNet():
         cost = 0.0
         for x, y in data:
             if testing == True or validation == True:
-                vectorize(y) 
-            a = self.neuralnet_output(x)
-            cost += (0.5*np.linalg.norm(a-y)**2) / len(data)
-        return cost
+                y = vectorize(y)
+            cost += self.cost_function(x,y) / len(data)
+
+        return (cost)
+    
+# used for debugging
+    # def tf_costfunc(self, data, testing=False, validation=False):
+    #     print("tfcost")
+    #     cost = 0.0
+    #     for x, y in data:
+     
+    #         if testing == True or validation == True:
+    #             vectorize(y)
+ 
+    #         y_hat = self.neuralnet_output(x)
+    #         cost += tf.keras.losses.binary_crossentropy(y, y_hat).numpy()
+
+    #     return sum(cost)
 
 
     def mini_batch(self, mini_batch, learning_rate):
@@ -114,7 +139,7 @@ class NeuralNet():
         z_vectors, activations_list = self.feedforward(x)
 
         grad_biases = [0 for _ in self.biases]
-        grad_weights = [0 for i in self.weights]
+        grad_weights = [0 for _ in self.weights]
 
         C_x = activations_list[-1] - y
         delta = C_x * sigmoid_prime(z_vectors[-1]) # (δ^L)

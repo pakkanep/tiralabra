@@ -3,8 +3,6 @@ import load_data as ld
 import numpy as np
 
 
-
-
 if __name__ == "__main__":
     sizes = [784, 100, 10]
     neuroverkko = NeuralNet(sizes)
@@ -14,9 +12,14 @@ if __name__ == "__main__":
     
     neuroverkko.stochastic_gradient_descent(
         learning_rate,
-        30,
-        training,
+        4,
         10,
-        testing
+        training,
         )
+
+        
+
+    
+
+        
 

@@ -119,12 +119,39 @@ class TestNeuralNet(unittest.TestCase):
         return self.assertGreater(cost_epoch_1, cost_epoch_2)
 
 
+    def test_all_network_layers_change_after_each_optimizer_step(self):
+        """
+        Tests that all the layers changes meaning that weights and biases in each layer gets updated after a few batches
+        """
+        self.multilayer = NeuralNet([784, 20, 20, 20, 10])
+        ogw = self.multilayer.weights
+        ogb = self.multilayer.biases
+        training_data = self.data[0][:5000]
+        checker = True
+        n = len(training_data)
+        batch_size = 10
+        learning_rate = 2.0
+        for epoch in range(3):
+            random.shuffle(training_data)
+            for idx in range(0, n, batch_size):
+                minibatch = training_data[idx:idx+batch_size]
+                self.multilayer.mini_batch(minibatch, learning_rate)
+
+            for og, new in zip(ogb, self.multilayer.biases):
+                val = np.all(np.equal(og, new))
+                if val: checker = False; break
+        
+
+            for og, new in zip(ogw, self.multilayer.weights):
+                val = np.all(np.equal(og, new))
+                if val: checker = False; break
+
+        return self.assertTrue(checker)
+
     def test_network_overfits_to_a_small_dataset(self):
         pass
 
 
     def test_order_of_samples_in_batch_doesnot_affect_output(self):
         pass
-
-    def test_all_network_layers_change_after_each_optimizer_step(self):
-        pass
+    
