@@ -1,8 +1,6 @@
 # neural network object
 import random
 import numpy as np
-#import tensorflow as tf
-
 
 class NeuralNet():
     def __init__(self, layers:list):
@@ -31,13 +29,14 @@ class NeuralNet():
             rounds,
             batch_size,
             training_data,
-
             test_data=False,
-            validation_data=False
+            validation_data=False,
+            show_learning_progress=True
         ):
         """
         Searches the local minimum for the cost func
         """
+        
         n = len(training_data)
         for r in range(rounds):
             print("round: ",r, "/", rounds)
@@ -45,18 +44,22 @@ class NeuralNet():
             for idx in range(0, n, batch_size):
                 minibatch = training_data[idx:idx+batch_size]
                 self.mini_batch(minibatch, learning_rate)
-        
 
-        if test_data or validation_data:
-            training_sum = self.accuracy(training_data, training=True)
-            valid_sum = self.accuracy(test_data)
-            print("test accuracy", valid_sum, "/", len(test_data))
-            print("training accuracy", training_sum, "/", len(training_data))
-            print()
-            print("total cost testdata", self.total_cost(test_data, testing=True))
-            print("total cost trainingdata", self.total_cost(training_data))
-            print()
 
+            if show_learning_progress:    
+                training_accuracy = self.accuracy(training_data, training=True)
+                print("Training accuracy:", training_accuracy, "/", len(training_data))
+                print("Total cost training data:", self.total_cost(training_data))
+
+                if test_data:
+                    test_accuracy = self.accuracy(test_data)
+                    print("Test accuracy:", test_accuracy, "/", len(test_data))
+                    print("Total cost test data:", self.total_cost(test_data, testing=True))
+
+                if validation_data:
+                    validation_accuracy = self.accuracy(validation_data)
+                    print("Validation accuracy:", validation_accuracy)
+                    print("total cost validation data:", self.total_cost(validation_data, validation=True))
 
 
     def neuralnet_output(self, x):
@@ -87,20 +90,6 @@ class NeuralNet():
             cost += self.cost_function(x,y) / len(data)
 
         return (cost)
-    
-# used for debugging
-    # def tf_costfunc(self, data, testing=False, validation=False):
-    #     print("tfcost")
-    #     cost = 0.0
-    #     for x, y in data:
-     
-    #         if testing == True or validation == True:
-    #             vectorize(y)
- 
-    #         y_hat = self.neuralnet_output(x)
-    #         cost += tf.keras.losses.binary_crossentropy(y, y_hat).numpy()
-
-    #     return sum(cost)
 
 
     def mini_batch(self, mini_batch, learning_rate):
