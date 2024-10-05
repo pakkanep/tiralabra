@@ -3,6 +3,8 @@ import load_data as ld
 import numpy as np
 
 def ui():
+    print("Note that the ui does not do any error checking. Implemented for testing the network easily")
+    
     while True:
         print("\nNeural Network Menu")
         print("1. Train network")

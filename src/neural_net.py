@@ -12,6 +12,17 @@ class NeuralNet():
 
 
     def accuracy(self, data, training=False):
+        """
+        Passes input x trough the net and compares the output to y for all (x, y) pairs in data.
+
+        Args:
+            data (list) 
+            training (bool)
+
+        Returns:
+            int: amount of correctly classified digits.
+        """
+
         if training == True:
             results = [(np.argmax(self.neuralnet_output(x)), un_vectorize(y))
                        for (x, y) in data]
@@ -34,7 +45,19 @@ class NeuralNet():
             show_learning_progress=True
         ):
         """
-        Searches the local minimum for the cost func
+        Searches the local minimum for the cost function
+
+        Args:
+            learning_rate (float) hyperparameter
+            rounds (int)
+            batch_size (int)
+            training_data ()
+            test_data ()
+            validation_data ()
+            show_learning_progress ()
+
+        Returns:
+            None
         """
         
         n = len(training_data)
@@ -65,6 +88,12 @@ class NeuralNet():
     def neuralnet_output(self, x):
         """
         Calculates the output of the network with given input x
+        
+        Args:
+            x (numpy.ndarray) vector): 28x28x pixel image reshaped to a (784, 1) vector.
+
+        Returns:
+            numpy.ndarray: (10, 0) vector.
         """
         activations = x
         for bias, weight in zip(self.biases, self.weights):
@@ -74,15 +103,31 @@ class NeuralNet():
 
     def cost_function(self, x, y):
         """
-        Calculates the MSE 
+        Calculates the Mean squared error.
+
+        Args:
+            x (numpy.ndarray): (784, 1) vector.
+            y (numpy.ndarray): (10, 1) vector.
+
+        Returns:
+            float: cost of one input-target pair (x,y).
         """
+
         y_hat = self.neuralnet_output(x)
         return 0.5 * np.sum((y_hat-y)**2)
 
     def total_cost(self, data, testing=False, validation=False):
         """
-            Return the total cost for the data set
+        calculates total cost of all the input-target pairs (x,y) in the data set
+
+        Args:
+            data (list of (x, y)): x is the input and y is the correct output.
+            testing or validation (bool): tells if y in data needs to be reshaped.
+
+        Returns:
+            float: total cost for the dataset.
         """
+
         cost = 0.0
         for x, y in data:
             if testing == True or validation == True:
@@ -94,7 +139,14 @@ class NeuralNet():
 
     def mini_batch(self, mini_batch, learning_rate):
         """
+        modifies the weights and biases in the network for one training set
 
+        Args:
+            mini_batch (list): list of input-target pairs (x,y).
+            learning_rate (float): controls how much the models weights are adjusted with respect to the error during training.
+
+        Returns:
+            None.
         """
         x = np.asarray([_x.ravel() for _x, _y in mini_batch]).transpose() 
         y = np.asarray([_y.ravel() for _x, _y in mini_batch]).transpose()
@@ -107,6 +159,16 @@ class NeuralNet():
 
 
     def feedforward(self, a):
+        """
+        calculates layers activations and weighted input.
+
+        Args:
+            a (numpy.asarray): (784, 10) shape matrix
+
+        Returns:
+            list: all the activations for each layer.
+            list: all the weighted inputs for all neurons 
+        """
         z_vectors = []
         activations_list = [a]
         activation = a
@@ -123,6 +185,13 @@ class NeuralNet():
     def backpropagation(self, x, y):
         """
         Calculates the gradient vectors
+    
+        Args:
+            x (): .
+            y (): .
+
+        Returns:
+            (tuple): gradient_biases, gradient_weights
         """
 
         z_vectors, activations_list = self.feedforward(x)
@@ -152,15 +221,50 @@ class NeuralNet():
 
 
 def sigmoid(z):
+    """
+    .
+
+    Args:
+        z (): .
+
+    Returns:
+        float: .
+    """
     return 1.0 / (1.0 + np.exp(-z))
 
 def sigmoid_prime(z):
+    """
+    .
+
+    Args:
+        z (int): .
+        
+    Returns:
+        : .
+    """
     return sigmoid(z) * (1 - sigmoid(z))
 
 def un_vectorize(y):
+    """
+    .
+
+    Args:
+        y (numpy.ndarray): (10, 1) vector.
+
+    Returns:
+        int: the index where value is 1.
+    """
     return np.where(y == 1)[0]
 
 def vectorize(y):
+    """
+
+    Args:
+        y (int): the index that should have value 1.
+
+    Returns:
+        numpy.ndarray: (10,1) vector that tells the target value.
+    """
     result = np.zeros((10, 1))
     result[y] = 1.0
     return result
