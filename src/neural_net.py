@@ -118,7 +118,7 @@ class NeuralNet():
 
     def total_cost(self, data, testing=False, validation=False):
         """
-        calculates total cost of all the input-target pairs (x,y) in the data set
+        Calculates total cost of all the input-target pairs (x,y) in the data set
 
         Args:
             data (list of (x, y)): x is the input and y is the correct output.
@@ -139,7 +139,7 @@ class NeuralNet():
 
     def mini_batch(self, mini_batch, learning_rate):
         """
-        modifies the weights and biases in the network for one training set
+        Modifies the weights and biases in the network for one training set
 
         Args:
             mini_batch (list): list of input-target pairs (x,y).
@@ -160,7 +160,7 @@ class NeuralNet():
 
     def feedforward(self, a):
         """
-        calculates layers activations and weighted input.
+        Calculates layers activations and weighted input.
 
         Args:
             a (numpy.asarray): (784, 10) shape matrix
@@ -187,8 +187,8 @@ class NeuralNet():
         Calculates the gradient vectors
     
         Args:
-            x (): .
-            y (): .
+            x (numpy.ndarray): (784, 10) shape matrix, that contains all inputs.
+            y (numpy.ndarray): (10, 10) shape matrix, that contains all outputs.
 
         Returns:
             (tuple): gradient_biases, gradient_weights
@@ -222,49 +222,54 @@ class NeuralNet():
 
 def sigmoid(z):
     """
-    .
+    Compute the sigmoid function for the input z.
 
     Args:
-        z (): .
-
+        z (numpy.ndarray): The input value or array for which to compute the sigmoid function.
+    
     Returns:
-        float: .
+        numpy.ndarray: The computed sigmoid value(s), ranging between 0 and 1.
     """
     return 1.0 / (1.0 + np.exp(-z))
 
+
 def sigmoid_prime(z):
     """
-    .
+    Compute the derivative of the sigmoid function (also known as sigmoid prime).
 
     Args:
-        z (int): .
-        
+        z (numpy.ndarray): The input value or array for which to compute the derivative of the sigmoid function.
+
     Returns:
-        : .
+        numpy.ndarray: The computed derivative of the sigmoid function.
     """
     return sigmoid(z) * (1 - sigmoid(z))
 
+
 def un_vectorize(y):
     """
-    .
+    Convert a vector back to its original integer form.
 
     Args:
-        y (numpy.ndarray): (10, 1) vector.
+        y (numpy.ndarray): A (10, 1) shape vector, where one value is 1 and the rest are 0.
 
     Returns:
-        int: the index where value is 1.
+        int: The index (0-9) where the value is 1, representing the original class/label.
     """
     return np.where(y == 1)[0]
 
+
 def vectorize(y):
     """
+    Convert an integer label into a (10, 1) shape vector.
 
     Args:
-        y (int): the index that should have value 1.
+        y (int): The index (0-9) that corresponds to the target class/label.
 
     Returns:
-        numpy.ndarray: (10,1) vector that tells the target value.
+        numpy.ndarray: A (10, 1) one-hot encoded vector with 1 at the given index `y` and 0s elsewhere.
     """
     result = np.zeros((10, 1))
     result[y] = 1.0
     return result
+
