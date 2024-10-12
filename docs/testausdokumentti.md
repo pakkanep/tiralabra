@@ -1,4 +1,7 @@
 # Testaus
+### Testisyötteet:
+- Testisyötteenä toimii MNist data eli sama data kun millä verkkoa opetetaan ja testataan. Kuitenkin niin että käyetään vain osaa koko datasta ja osa valitaan aina satunnaisesti.
+
 ### NeuralNet luokka:
 - Testataan että konstruktori luo oikeanlaisen verkon (kesken).
 
