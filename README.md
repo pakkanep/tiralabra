@@ -24,5 +24,6 @@ HY - Aineopintojen harjoitustyö: Algoritmit ja tekoäly
 
 [Viikko 5](./docs/viikkoraportit/viikkoraportti5.md)
 
+[Viikko 6](./docs/viikkoraportit/viikkoraportti6.md)
 
 ## Asennus ja käyttö
