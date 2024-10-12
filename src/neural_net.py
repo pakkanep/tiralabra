@@ -59,7 +59,7 @@ class NeuralNet():
         Returns:
             None
         """
-        
+
         n = len(training_data)
         for r in range(rounds):
             print("round: ",r, "/", rounds)
@@ -69,7 +69,7 @@ class NeuralNet():
                 self.mini_batch(minibatch, learning_rate)
 
 
-            if show_learning_progress:    
+            if show_learning_progress:
                 training_accuracy = self.accuracy(training_data, training=True)
                 print("Training accuracy:", training_accuracy, "/", len(training_data))
                 print("Total cost training data:", self.total_cost(training_data))
@@ -82,7 +82,9 @@ class NeuralNet():
                 if validation_data:
                     validation_accuracy = self.accuracy(validation_data)
                     print("Validation accuracy:", validation_accuracy)
-                    print("total cost validation data:", self.total_cost(validation_data, validation=True))
+                    print("total cost validation data:",
+                        self.total_cost(validation_data, validation=True)
+                        )
 
 
     def neuralnet_output(self, x):
@@ -134,7 +136,7 @@ class NeuralNet():
                 y = vectorize(y)
             cost += self.cost_function(x,y) / len(data)
 
-        return (cost)
+        return cost
 
 
     def mini_batch(self, mini_batch, learning_rate):
@@ -272,4 +274,3 @@ def vectorize(y):
     result = np.zeros((10, 1))
     result[y] = 1.0
     return result
-

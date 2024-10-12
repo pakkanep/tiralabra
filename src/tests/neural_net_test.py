@@ -49,7 +49,10 @@ class TestNeuralNet(unittest.TestCase):
         rel_diffs = []
 
         for l in range(len(nabla_w)):
-            difference = np.linalg.norm(num_nabla_w[l] - nabla_w[l]) / (np.linalg.norm(num_nabla_w[l]) + np.linalg.norm(nabla_w[l]))
+            difference = np.linalg.norm(
+                num_nabla_w[l] - nabla_w[l]) / (np.linalg.norm(num_nabla_w[l]) +
+                                                np.linalg.norm(nabla_w[l])
+                )
             rel_diffs.append(difference)
 
         return self.assertGreater(10**-7, max(rel_diffs))
