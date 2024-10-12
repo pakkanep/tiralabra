@@ -27,3 +27,37 @@ HY - Aineopintojen harjoitustyö: Algoritmit ja tekoäly
 [Viikko 6](./docs/viikkoraportit/viikkoraportti6.md)
 
 ## Asennus ja käyttö
+Asenna riippuvuudet komennolla
+
+```bash
+poetry install
+```
+
+Käynnistä sovellus komennolla
+
+```bash
+poetry run invoke start
+```
+
+Suorita testit komennolla
+
+```bash
+poetry run invoke test
+```
+
+Käynnistä sovellus suorittaen ensin testit komennolla
+```bash
+poetry run invoke devstart
+```
+
+Aja testikattavuusraportti komennolla
+
+```bash
+poetry run invoke coverage
+```
+
+Tee Pylint-tarkastukset komennolla
+
+```bash
+poetry run invoke lint
+```
