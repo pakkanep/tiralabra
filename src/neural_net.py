@@ -23,7 +23,7 @@ class NeuralNet():
             int: amount of correctly classified digits.
         """
 
-        if training == True:
+        if training is True:
             results = [(np.argmax(self.neuralnet_output(x)), un_vectorize(y))
                        for (x, y) in data]
         else:
@@ -132,7 +132,7 @@ class NeuralNet():
 
         cost = 0.0
         for x, y in data:
-            if testing == True or validation == True:
+            if testing is True or validation is True:
                 y = vectorize(y)
             cost += self.cost_function(x,y) / len(data)
 
@@ -145,19 +145,23 @@ class NeuralNet():
 
         Args:
             mini_batch (list): list of input-target pairs (x,y).
-            learning_rate (float): controls how much the models weights are adjusted with respect to the error during training.
+            learning_rate (float): controls how much the models weights
+            are adjusted with respect to the error during training.
 
         Returns:
             None.
         """
-        x = np.asarray([_x.ravel() for _x, _y in mini_batch]).transpose() 
+        x = np.asarray([_x.ravel() for _x, _y in mini_batch]).transpose()
         y = np.asarray([_y.ravel() for _x, _y in mini_batch]).transpose()
 
         grad_biases, grad_weights = self.backpropagation(x, y)
 
         m = len(mini_batch)
-        self.weights = [w - (learning_rate / m) * grad_w for w, grad_w in zip(self.weights, grad_weights)]
-        self.biases = [b - (learning_rate / m) * grad_b for b, grad_b in zip(self.biases, grad_biases)]
+        self.weights = [w - (learning_rate / m) * grad_w for
+                        w, grad_w in zip(self.weights, grad_weights)]
+
+        self.biases = [b - (learning_rate / m) * grad_b for 
+                       b, grad_b in zip(self.biases, grad_biases)]
 
 
     def feedforward(self, a):
@@ -240,7 +244,8 @@ def sigmoid_prime(z):
     Compute the derivative of the sigmoid function (also known as sigmoid prime).
 
     Args:
-        z (numpy.ndarray): The input value or array for which to compute the derivative of the sigmoid function.
+        z (numpy.ndarray): The input value or array for which to compute 
+        the derivative of the sigmoid function.
 
     Returns:
         numpy.ndarray: The computed derivative of the sigmoid function.
@@ -269,7 +274,8 @@ def vectorize(y):
         y (int): The index (0-9) that corresponds to the target class/label.
 
     Returns:
-        numpy.ndarray: A (10, 1) one-hot encoded vector with 1 at the given index `y` and 0s elsewhere.
+        numpy.ndarray: A (10, 1) one-hot encoded vector with 1 at the given
+        index `y` and 0s elsewhere.
     """
     result = np.zeros((10, 1))
     result[y] = 1.0

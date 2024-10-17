@@ -60,8 +60,9 @@ class TestNeuralNet(unittest.TestCase):
 
     def test_classification_accuracy_increases(self):
         """
-        Tests that the classification increases after an epoch of minibatch updating weights and biases.
-        Does two epochs so the comparison does not happen based on random data
+        Tests that the classification increases after an epoch of minibatch
+        updating weights and biases. Does two epochs so the comparison does
+        not happen based on random data
         """
         training_data = self.data[0][:20000]
         validation_data = self.data[1]
@@ -74,12 +75,12 @@ class TestNeuralNet(unittest.TestCase):
             for idx in range(0, n, batch_size):
                 minibatch = training_data[idx:idx+batch_size]
                 self.neural_net.mini_batch(minibatch, learning_rate)
-            
+
             if epoch == 0:
                 accuracy1 += self.neural_net.accuracy(validation_data)
             else:
                 accuracy2 += self.neural_net.accuracy(validation_data)
-        
+
         return self.assertGreater(accuracy2, accuracy1)
 
 
@@ -87,16 +88,16 @@ class TestNeuralNet(unittest.TestCase):
     def test_gradients_are_non_zero(self):
         training_data = self.data[0][:1]
         grad_b, grad_w = self.neural_net.backpropagation(training_data[0][0], training_data[0][1])
-        
+
         grad_b_non_zero, grad_w_non_zero = True, True
 
         for grad in grad_w[1:]:
-            if np.any(grad == 0) == True:
+            if np.any(grad == 0) is True:
                 grad_w_non_zero = False
                 break
-           
+
         for grad in grad_b:
-            if np.any(grad == 0) == True:
+            if np.any(grad == 0) is True:
                 grad_b_non_zero = False
                 break
 
@@ -113,18 +114,19 @@ class TestNeuralNet(unittest.TestCase):
             for idx in range(0, n, batch_size):
                 minibatch = training_data[idx:idx+batch_size]
                 self.neural_net.mini_batch(minibatch, learning_rate)
-            
+
             if epoch == 0:
                 cost_epoch_1 = self.neural_net.total_cost(training_data[:5000])
             else:
                 cost_epoch_2 = self.neural_net.total_cost(training_data[:5000])
-        
+
         return self.assertGreater(cost_epoch_1, cost_epoch_2)
 
 
     def test_all_network_layers_change_after_each_optimizer_step(self):
         """
-        Tests that all the layers changes meaning that weights and biases in each layer gets updated after a few batches
+        Tests that all the layers changes meaning that weights
+        and biases in each layer gets updated after a few batches
         """
         self.multilayer = NeuralNet([784, 20, 20, 20, 10])
         ogw = self.multilayer.weights
@@ -143,7 +145,7 @@ class TestNeuralNet(unittest.TestCase):
             for og, new in zip(ogb, self.multilayer.biases):
                 val = np.all(np.equal(og, new))
                 if val: checker = False; break
-        
+
 
             for og, new in zip(ogw, self.multilayer.weights):
                 val = np.all(np.equal(og, new))
@@ -151,10 +153,24 @@ class TestNeuralNet(unittest.TestCase):
 
         return self.assertTrue(checker)
 
-    def test_network_overfits_to_a_small_dataset(self):
-        pass
-
 
     def test_order_of_samples_in_batch_doesnot_affect_output(self):
+        result = True
+        test_data = self.data[2]
+        training_data = self.data[0][:5000]
+        self.neural_net.mini_batch(training_data[:1000], 0.5)
+        total_cost1 = round(self.neural_net.total_cost(test_data, testing=True))
+        output1 = self.neural_net.accuracy(test_data)
+        random.shuffle(test_data)
+        total_cost2 = round(self.neural_net.total_cost(test_data, testing=True))
+        output2 = self.neural_net.accuracy(test_data)
+        if total_cost1 != total_cost2:
+            result = False
+        if output1 != output2:
+            result = False
+
+        return self.assertEqual(True, result)
+
+    def test_network_overfits_to_a_small_dataset(self):
         pass
     

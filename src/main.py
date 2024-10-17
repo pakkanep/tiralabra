@@ -1,10 +1,10 @@
-from neural_net import NeuralNet
 import load_data as ld
-import numpy as np
+from neural_net import NeuralNet
+
 
 def ui():
     print("Note that the ui does not do any error checking. Implemented for testing the network easily")
-    
+
     while True:
         print("\nNeural Network Menu")
         print("1. Train network")
@@ -37,7 +37,9 @@ def train_network():
     batch_size = int(batch_size)
     learning_rate = float(learning_rate)
 
-    print(f"\nTraining network with layers {layer_sizes}, {epochs} epochs, batch size {batch_size}, learning rate {learning_rate}.")
+    print(f"\nTraining network with layers {layer_sizes},\
+        {epochs} epochs, batch size {batch_size},\
+        learning rate {learning_rate}.")
 
     training_data, validation_data, test_data = ld.load_data()
     net = NeuralNet(layer_sizes)
@@ -68,8 +70,3 @@ def test_network():
 
 if __name__ == "__main__":
     ui()
-
-    
-
-        
-
