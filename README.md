@@ -2,7 +2,7 @@
 
 Neuroverkko käsinkirjoitettujen numeroiden tunnistamiseen / Neural network for recognizing handwritten digits
 
-HY - Aineopintojen harjoitustyö: Algoritmit ja tekoäly
+Helsingin Yliopisto - Aineopintojen harjoitustyö: Algoritmit ja tekoäly / University of Helsinki Bachelor's Level Course Project: Algorithms and Artificial Intelligence
 
 ## Dokumentaatio
 [Määrittelydokumentti](./docs/maarittelydokumentti.md)
@@ -26,37 +26,37 @@ HY - Aineopintojen harjoitustyö: Algoritmit ja tekoäly
 
 [Viikko 6](./docs/viikkoraportit/viikkoraportti6.md)
 
-## Asennus ja käyttö
-Asenna riippuvuudet komennolla
+## Asennus ja käyttö / Installation and Usage
+Asenna riippuvuudet komennolla / Install dependencies with the command
 
 ```bash
 poetry install
 ```
 
-Käynnistä sovellus komennolla
+Käynnistä sovellus komennolla / Start the application with the command
 
 ```bash
 poetry run invoke start
 ```
 
-Suorita testit komennolla
+Suorita testit komennolla / Run the tests
 
 ```bash
 poetry run invoke test
 ```
 
-Käynnistä sovellus suorittaen ensin testit komennolla
+Käynnistä sovellus suorittaen ensin testit komennolla / Run tests and then start the application
 ```bash
 poetry run invoke devstart
 ```
 
-Aja testikattavuusraportti komennolla
+Aja testikattavuusraportti komennolla / Run the test coverage report with the command
 
 ```bash
 poetry run invoke coverage
 ```
 
-Tee Pylint-tarkastukset komennolla
+Tee Pylint-tarkastukset komennolla / Perform Pylint checks with the command
 
 ```bash
 poetry run invoke lint
