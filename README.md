@@ -1,6 +1,6 @@
 # tiralabra
 
-Neural network for recognizing handwritten digits
+Neuroverkko käsinkirjoitettujen numeroiden tunnistamiseen / Neural network for recognizing handwritten digits
 
 HY - Aineopintojen harjoitustyö: Algoritmit ja tekoäly
 
