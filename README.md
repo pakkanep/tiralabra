@@ -1,4 +1,5 @@
 # tiralabra
+![GHA workflow badge](https://github.com/pakkanep/tiralabra/workflows/CI/badge.svg)
 
 Neuroverkko käsinkirjoitettujen numeroiden tunnistamiseen / Neural network for recognizing handwritten digits
 
