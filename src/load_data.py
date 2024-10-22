@@ -9,7 +9,7 @@ def load_data():
     Loads the data and return a tuple
     """
     f = gzip.open("src/data/mnist.pkl.gz", "rb")
-    u = pickle._Unpickler(f)
+    u = pickle._Unpickler(f) # pylint: disable=protected-access
     u.encoding = 'latin1'
     train_data, val_data, test_data = u.load()
     f.close()

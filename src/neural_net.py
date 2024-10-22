@@ -1,8 +1,17 @@
-# neural network object
+"""
+neural_net.py
+
+Stochastic gradient descent learning algorithm for a feedforward neural network. 
+Gradients are calculated using backpropagation.
+"""
 import random
 import numpy as np
 
 class NeuralNet():
+    """
+        Attributes:
+        methods:
+    """
     def __init__(self, layers:list):
         self.sizes = layers
         self.n_layers = len(layers)
@@ -30,61 +39,56 @@ class NeuralNet():
             results = [(np.argmax(self.neuralnet_output(x)), y)
                         for (x, y) in data]
 
-        result_accuracy = sum(int(x == y) for (x, y) in results)
+        result_accuracy = sum(int(x.item() == y.item()) for (x, y) in results)
+
         return result_accuracy
 
-
-    def stochastic_gradient_descent(
-            self,
-            learning_rate,
-            rounds,
-            batch_size,
-            training_data,
-            test_data=False,
-            validation_data=False,
-            show_learning_progress=True
+    # pylint: disable=too-many-arguments, too-many-positional-arguments
+    def stochastic_gradient_descent(self, learning_rate, rounds,
+            batch_size, data, show_learning_progress=True
         ):
         """
         Searches the local minimum for the cost function
 
         Args:
             learning_rate (float) hyperparameter
-            rounds (int)
-            batch_size (int)
-            training_data ()
-            test_data ()
-            validation_data ()
-            show_learning_progress ()
+            rounds (int) n epochs of training
+            batch_size (int) size of minibatch means n input-target pairs
+            data (tuple) training_data, validation_data, test_data
+            show_learning_progress (bool) True if learning progress is monitored
 
         Returns:
             None
         """
-
+        training_data, validation_data, test_data = data
         n = len(training_data)
         for r in range(rounds):
             print("round: ",r, "/", rounds)
             random.shuffle(training_data)
             for idx in range(0, n, batch_size):
-                minibatch = training_data[idx:idx+batch_size]
-                self.mini_batch(minibatch, learning_rate)
+                self.mini_batch(training_data[idx:idx+batch_size], learning_rate)
 
 
             if show_learning_progress:
                 training_accuracy = self.accuracy(training_data, training=True)
-                print("Training accuracy:", training_accuracy, "/", len(training_data))
-                print("Total cost training data:", self.total_cost(training_data))
+                print(
+                    "Training accuracy:", training_accuracy, "/", len(training_data),
+                    "   Cost:", self.total_cost(training_data)
+                    )
+
 
                 if test_data:
                     test_accuracy = self.accuracy(test_data)
-                    print("Test accuracy:", test_accuracy, "/", len(test_data))
-                    print("Total cost test data:", self.total_cost(test_data, testing=True))
+                    print(
+                    "Test accuracy:", test_accuracy, "/", len(test_data),
+                    "   Cost:", self.total_cost(test_data, convert=True)
+                    )
 
                 if validation_data:
                     validation_accuracy = self.accuracy(validation_data)
-                    print("Validation accuracy:", validation_accuracy)
-                    print("total cost validation data:",
-                        self.total_cost(validation_data, validation=True)
-                        )
+                    print(
+                    "Validation accuracy:", validation_accuracy, "/", len(validation_data),
+                    "   Cost:", self.total_cost(validation_data, convert=True))
 
 
     def neuralnet_output(self, x):
@@ -95,7 +99,7 @@ class NeuralNet():
             x (numpy.ndarray) vector): 28x28x pixel image reshaped to a (784, 1) vector.
 
         Returns:
-            numpy.ndarray: (10, 0) vector.
+            numpy.ndarray: (10, 1) vector.
         """
         activations = x
         for bias, weight in zip(self.biases, self.weights):
@@ -118,7 +122,7 @@ class NeuralNet():
         y_hat = self.neuralnet_output(x)
         return 0.5 * np.sum((y_hat-y)**2)
 
-    def total_cost(self, data, testing=False, validation=False):
+    def total_cost(self, data, convert=False):
         """
         Calculates total cost of all the input-target pairs (x,y) in the data set
 
@@ -132,7 +136,7 @@ class NeuralNet():
 
         cost = 0.0
         for x, y in data:
-            if testing is True or validation is True:
+            if convert is True:
                 y = vectorize(y)
             cost += self.cost_function(x,y) / len(data)
 
@@ -160,7 +164,7 @@ class NeuralNet():
         self.weights = [w - (learning_rate / m) * grad_w for
                         w, grad_w in zip(self.weights, grad_weights)]
 
-        self.biases = [b - (learning_rate / m) * grad_b for 
+        self.biases = [b - (learning_rate / m) * grad_b for
                        b, grad_b in zip(self.biases, grad_biases)]
 
 
@@ -205,8 +209,8 @@ class NeuralNet():
         grad_biases = [0 for _ in self.biases]
         grad_weights = [0 for _ in self.weights]
 
-        C_x = activations_list[-1] - y
-        delta = C_x * sigmoid_prime(z_vectors[-1]) # (δ^L)
+        output_differences = activations_list[-1] - y
+        delta = output_differences * sigmoid_prime(z_vectors[-1]) # (δ^L)
 
         grad_biases[-1] = delta.sum(1).reshape([len(delta), 1])
         grad_weights[-1] = np.dot(delta, activations_list[-2].transpose())
