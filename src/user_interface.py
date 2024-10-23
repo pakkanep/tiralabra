@@ -42,8 +42,9 @@ def train_network():
     given by the user
     """
     layers = (input
-            ("Enter network layers as comma-separated values (default: 784,100,10): ")
-            or "784,100,10")
+            ("Enter the number of neurons in hidden layers "
+            "as comma-separated values (default: 125): ")
+            or "125")
 
     epochs = (input("Enter number of epochs (default: 10): ")
             or "10")
@@ -59,13 +60,16 @@ def train_network():
 
 
     layer_sizes = list(map(int, layers.split(',')))
+    layer_sizes.insert(0, 784)
+    layer_sizes.append(10)
     epochs = int(epochs)
     batch_size = int(batch_size)
     learning_rate = float(learning_rate)
 
-    print(f"\nTraining network with layers {layer_sizes},\
-        {epochs} epochs, batch size {batch_size},\
-        learning rate {learning_rate}.")
+    print(
+        f"\nTraining network with layers {layer_sizes}, {epochs} epochs, " \
+        f"batch size {batch_size}, learning rate {learning_rate}."
+        )
 
     data = ld.load_data()
     net = NeuralNet(layer_sizes)

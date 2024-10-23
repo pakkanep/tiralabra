@@ -63,32 +63,33 @@ class NeuralNet():
         training_data, validation_data, test_data = data
         n = len(training_data)
         for r in range(rounds):
-            print("round: ",r, "/", rounds)
+            print("\nround: ",r, "/", rounds)
             random.shuffle(training_data)
             for idx in range(0, n, batch_size):
                 self.mini_batch(training_data[idx:idx+batch_size], learning_rate)
 
 
             if show_learning_progress:
-                training_accuracy = self.accuracy(training_data, training=True)
+                train_acc = self.accuracy(training_data[:10000], training=True)
                 print(
-                    "Training accuracy:", training_accuracy, "/", len(training_data),
-                    "   Cost:", self.total_cost(training_data)
-                    )
-
+                    f"{'Training accuracy:':<20} {train_acc:>6d}/{len(training_data[:10000]):<6d}"\
+                    f"  Cost: {self.total_cost(training_data):>20.10f}"
+                )
 
                 if test_data:
                     test_accuracy = self.accuracy(test_data)
                     print(
-                    "Test accuracy:", test_accuracy, "/", len(test_data),
-                    "   Cost:", self.total_cost(test_data, convert=True)
+                        f"{'Test accuracy:':<20} {test_accuracy:>6d}/{len(test_data):<6d}"\
+                        f"  Cost: {self.total_cost(test_data, convert=True):>20.10f}"
                     )
 
                 if validation_data:
-                    validation_accuracy = self.accuracy(validation_data)
+                    valid_acc = self.accuracy(validation_data)
                     print(
-                    "Validation accuracy:", validation_accuracy, "/", len(validation_data),
-                    "   Cost:", self.total_cost(validation_data, convert=True))
+                        f"{'Validation accuracy:':<20} {valid_acc:>6d}/{len(validation_data):<6d}"\
+                        f"  Cost: {self.total_cost(validation_data, convert=True):>20.10f}"
+                    )
+
 
 
     def neuralnet_output(self, x):
