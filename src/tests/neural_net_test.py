@@ -21,7 +21,6 @@ class TestNeuralNet(unittest.TestCase):
     Test class for testing neural network methods
     """
     def setUp(self):
-        #np.random.seed(90)
         self.neural_net = NeuralNet([784, 20, 10])
         self.data = load_data()
 
@@ -29,6 +28,19 @@ class TestNeuralNet(unittest.TestCase):
         """
         checks that the network gets constructed correctly
         """
+
+    def test_stochastic_gradient_descent(self):
+        """
+        Trains the network with actual hyperparameters for 3 epochs and ensures that the
+        network always reaches atleast 96% accuracy with testdata. This makes sure that
+        the network is working atleast at some level
+        """
+        real_net = NeuralNet([784, 125, 10])
+        real_net.stochastic_gradient_descent(3.0, 3, 10, self.data, False)
+        accuracy = real_net.accuracy(self.data[2])
+        self.assertGreater(accuracy, 9600)
+
+
 
     def test_accuarcy_with_convert(self):
         """

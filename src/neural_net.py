@@ -60,7 +60,7 @@ class NeuralNet():
         Returns:
             None
         """
-        training_data, validation_data, test_data = data
+        training_data = data[0]
         n = len(training_data)
         for r in range(rounds):
             print("\nround: ",r, "/", rounds)
@@ -68,27 +68,8 @@ class NeuralNet():
             for idx in range(0, n, batch_size):
                 self.mini_batch(training_data[idx:idx+batch_size], learning_rate)
 
-
             if show_learning_progress:
-                train_acc = self.accuracy(training_data[:10000], training=True)
-                print(
-                    f"{'Training accuracy:':<20} {train_acc:>6d}/{len(training_data[:10000]):<6d}"\
-                    f"  Cost: {self.total_cost(training_data):>20.10f}"
-                )
-
-                if test_data:
-                    test_accuracy = self.accuracy(test_data)
-                    print(
-                        f"{'Test accuracy:':<20} {test_accuracy:>6d}/{len(test_data):<6d}"\
-                        f"  Cost: {self.total_cost(test_data, convert=True):>20.10f}"
-                    )
-
-                if validation_data:
-                    valid_acc = self.accuracy(validation_data)
-                    print(
-                        f"{'Validation accuracy:':<20} {valid_acc:>6d}/{len(validation_data):<6d}"\
-                        f"  Cost: {self.total_cost(validation_data, convert=True):>20.10f}"
-                    )
+                self.print_progress(data)
 
 
 
@@ -229,6 +210,38 @@ class NeuralNet():
             grad_weights[-layer] = np.dot(delta, activations_list[-layer-1].transpose())
 
         return (grad_biases, grad_weights)
+
+    def print_progress(self, data):
+        """
+        Prints the learning progress of the network
+
+        Args:
+            data (tuple): training_data, validation_data, test_data
+
+        Returns:
+            None
+        """
+        training_data, validation_data, test_data = data
+
+        train_acc = self.accuracy(training_data[:10000], training=True)
+        print(
+            f"{'Training accuracy:':<20} {train_acc:>6d}/{len(training_data[:10000]):<6d}"\
+            f"  Cost: {self.total_cost(training_data):>20.10f}"
+        )
+
+        if test_data:
+            test_accuracy = self.accuracy(test_data)
+            print(
+                f"{'Test accuracy:':<20} {test_accuracy:>6d}/{len(test_data):<6d}"\
+                f"  Cost: {self.total_cost(test_data, convert=True):>20.10f}"
+            )
+
+        if validation_data:
+            valid_acc = self.accuracy(validation_data)
+            print(
+                f"{'Validation accuracy:':<20} {valid_acc:>6d}/{len(validation_data):<6d}"\
+                f"  Cost: {self.total_cost(validation_data, convert=True):>20.10f}"
+            )
 
 
 def sigmoid(z):

@@ -2,3 +2,9 @@
 
 omit =
     src/tests/*
+
+[report]
+
+exclude_lines=
+    def print_progress
+    self.print_progress
