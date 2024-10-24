@@ -1,5 +1,6 @@
 # tiralabra
 ![GHA workflow badge](https://github.com/pakkanep/tiralabra/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/github/pakkanep/tiralabra/graph/badge.svg?token=4FUGYDMMPR)](https://codecov.io/github/pakkanep/tiralabra)
 
 Neuroverkko käsinkirjoitettujen numeroiden tunnistamiseen / Neural network for recognizing handwritten digits
 
