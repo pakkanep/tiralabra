@@ -77,7 +77,10 @@ Hyperparametrit, kuten oppimisnopeus (learning rate), minisatsin koko (mini-batc
 
 
 ## Viitteet
-https://tim.jyu.fi/view/143092#DKUvbnUuGytQ
-http://neuralnetworksanddeeplearning.com/chap1.html
-https://www.sebastianbjorkqvist.com/blog/writing-automated-tests-for-neural-networks/
-https://www.3blue1brown.com/topics/neural-networks
+- https://tim.jyu.fi/view/143092#DKUvbnUuGytQ
+
+- http://neuralnetworksanddeeplearning.com/chap1.html
+
+- https://www.sebastianbjorkqvist.com/blog/writing-automated-tests-for-neural-networks/
+
+- https://www.3blue1brown.com/topics/neural-networks
